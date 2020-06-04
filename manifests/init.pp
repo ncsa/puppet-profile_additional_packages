@@ -40,14 +40,15 @@ class profile_additional_packages (
     # Limit list of packages by OS Family
     $packages = $pkg_list[ $facts['os']['family'] ]
 
-    # Find keys without a value and add default value
-    $sane_pkg_list = $packages.map |$key, $val| {
-        if $val { [ $key, $val ] }
-        else { [ $key, $default ] }
-    }.convert_to(Hash)
+    if $packages =~ Hash[ String[1], Data, 1 ] {
+      # Find keys without a value and add default value
+      $sane_pkg_list = $packages.map |$key, $val| {
+          if $val { [ $key, $val ] }
+          else { [ $key, $default ] }
+      }.convert_to(Hash)
 
-    # Ensure packages
-    ensure_packages( $sane_pkg_list, {'ensure' => 'installed'} )
+      ensure_packages( $sane_pkg_list )
+    }
 
 }
 
