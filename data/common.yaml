@@ -1,0 +1,8 @@
+---
+lookup_options:
+  profile_additional_packages::pkg_list:
+    merge:
+      strategy: "deep"
+      knockout_prefix: "-"
+
+profile_additional_packages::repo_list: {}
