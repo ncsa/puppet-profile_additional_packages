@@ -5,20 +5,20 @@
 
 **Classes**
 
-* [`profile_additional_packages`](#profile_additional_packages): Install additional yumrepos (specified in Hiera)
+* [`profile_additional_packages`](#profile_additional_packages): Install additional packages (specified in Hiera)
 
 ## Classes
 
 ### profile_additional_packages
 
-Install additional yumrepos (specified in Hiera)
+Install additional packages (specified in Hiera)
 
 #### Examples
 
 ##### 
 
 ```puppet
-baseline_cfg::additional_yumrepos:repo_list:
+baseline_cfg::additional_packages:repo_list:
   'rsyslog-v8':
     baseurl: http://rpms.adiscon.com/v8-stable/epel-$releasever/$basearch
     descr: rsyslog official repo
@@ -29,7 +29,7 @@ baseline_cfg::additional_yumrepos:repo_list:
 ##### 
 
 ```puppet
-include baseline_cfg::additional_yumrepos
+include baseline_cfg::additional_packages
 ```
 
 #### Parameters
@@ -40,7 +40,7 @@ The following parameters are available in the `profile_additional_packages` clas
 
 Data type: `Hash`
 
-Hash of (yumrepo configs) to create
+Hash of (packages configs) to create
 Hash key will be used as the yumrepo 'resource_title'
 Hash value must be a Hash of valid yumrepo attributes
   If 'ensure' is not provided, it will default to 'present'
