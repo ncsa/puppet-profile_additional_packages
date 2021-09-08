@@ -5,4 +5,19 @@ lookup_options:
       strategy: "deep"
       knockout_prefix: "-"
 
-profile_additional_packages::pkg_list: {}
+profile_additional_packages::pkg_list:
+  "RedHat":
+    "bzip2":
+    "git":
+    "iotop":
+    "lsof":
+    "net-tools":
+    "nmap":
+    "rsync":
+    "strace":
+    "tcpdump":
+    "tcsh":
+    "traceroute":
+    "tree":
+    "wget":
+    "zsh":
