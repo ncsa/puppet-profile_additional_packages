@@ -19,5 +19,6 @@ profile_additional_packages::pkg_list:
     "tcsh":
     "traceroute":
     "tree":
+    "vim-enhanced":
     "wget":
     "zsh":
