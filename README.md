@@ -29,7 +29,35 @@ include ::profile_additional_packages
 
 ## Usage
 
-The goal is that no paramters are required to be set. The default paramters should work for most NCSA deployments out of the box.
+The goal is that no parameters are required to be set. The default parameters should work for most NCSA deployments out of the box.
+
+But note that packages are specified in Hiera like this:
+```yaml
+profile_additional_packages::pkg_list:
+  "RedHat":
+    "htop":
+    "mailx":  # needed for Slurm and various other things
+    "mc":
+      ensure: "absent"
+    "slurm-slurmrestd":
+      install_options:
+        - "--disablerepo": "epel"
+```
+The above shows packages to be installed on Red Hat clients.
+
+Packages specified as empty hashes (htop, mailx) will be installed
+all together by a single dnf transaction (for the sake of speed).
+But note that the rpm command is used to test whether or not they
+are installed. It is important to list the actual package name that
+dnf finally installs. E.g., 'dnf install createrepo' will install
+createrepo_c on Red Hat 8. It is successfully installed from dnf's
+perspective, but rpm will say that it is not installed.
+
+Packages specified as non-empty hashes will be installed with
+ensure_packages and any key/value data for each package is passed
+to the package resource. These are necessarily processed individually
+by Puppet. Packages specified as empty hashes will also be attempted
+with ensure_packages as a backup method.
 
 ## Reference
 
