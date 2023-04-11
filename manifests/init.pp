@@ -29,15 +29,13 @@
 #           ensure: installed
 #       'bindutils':
 #           ensure: 17.1.19
-
 class profile_additional_packages (
-    Hash $pkg_list,
+  Hash $pkg_list,
 ) {
-
-  $script_name="puppet-profile_additional_packages-packages_without_params.sh"
+  $script_name='puppet-profile_additional_packages-packages_without_params.sh'
 
   file { "/root/scripts/${script_name}":
-    ensure  => 'present',
+    ensure  => 'file',
     mode    => '0740',
     owner   => 'root',
     group   => 'root',
@@ -46,10 +44,9 @@ class profile_additional_packages (
   }
 
   # Limit list of packages by OS Family
-  $packages = $pkg_list[ $facts['os']['family'] ]
+  $packages = $pkg_list[ $facts['os']['family']]
 
-  if $packages =~ Hash[ String[1], Data, 1 ] {
-
+  if $packages =~ Hash[String[1], Data, 1] {
     # Find keys without a value and install those packages
     # via exec/'yum install' (single yum transaction)
     $packages_without_params = $packages.filter |$key, $val| {
@@ -57,7 +54,7 @@ class profile_additional_packages (
     }.keys.join(' ')
     exec { 'install_packages_without_params':
       command => "/root/scripts/${script_name} ${packages_without_params}",
-      unless  => "/usr/bin/rpm -q ${packages_without_params}" 
+      unless  => "/usr/bin/rpm -q ${packages_without_params}",
     }
 
     # Process ALL keys using ensure_packages:
@@ -70,16 +67,14 @@ class profile_additional_packages (
     #   with the exec
 
     # Default value (for bare package names)
-    $default = {'ensure' => 'installed'}
+    $default = { 'ensure' => 'installed' }
 
     # Find keys without a value and add default value
     $sane_pkg_list = $packages.map |$key, $val| {
-      if $val { [ $key, $val ] }
-      else { [ $key, $default ] }
+      if $val {[$key, $val] }
+      else {[$key, $default] }
     }.convert_to(Hash)
 
     ensure_packages( $sane_pkg_list )
-
   }
-
 }
