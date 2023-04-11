@@ -17,6 +17,7 @@ profile_additional_packages::pkg_list:
     "strace":
     "tcpdump":
     "tcsh":
+    "time":
     "traceroute":
     "tree":
     "vim-enhanced":
