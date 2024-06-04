@@ -23,3 +23,20 @@ profile_additional_packages::pkg_list:
     "vim-enhanced":
     "wget":
     "zsh":
+  "Suse":
+    "bzip2":
+    "git":
+    "iotop":
+    "lsof":
+    "net-tools":
+    "nmap":
+    "rsync":
+    "strace":
+    "tcpdump":
+    "tcsh":
+    "time":
+    "traceroute":
+    "tree":
+    "vim":
+    "wget":
+    "zsh":

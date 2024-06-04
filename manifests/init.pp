@@ -32,29 +32,32 @@
 class profile_additional_packages (
   Hash $pkg_list,
 ) {
-  $script_name='puppet-profile_additional_packages-packages_without_params.sh'
-
-  file { "/root/scripts/${script_name}":
-    ensure  => 'file',
-    mode    => '0740',
-    owner   => 'root',
-    group   => 'root',
-    source  => "puppet:///modules/${module_name}/root/scripts/${script_name}",
-    require => File['/root/scripts'],
-  }
-
   # Limit list of packages by OS Family
   $packages = $pkg_list[ $facts['os']['family']]
 
   if $packages =~ Hash[String[1], Data, 1] {
-    # Find keys without a value and install those packages
-    # via exec/'yum install' (single yum transaction)
-    $packages_without_params = $packages.filter |$key, $val| {
-      empty($val)
-    }.keys.join(' ')
-    exec { 'install_packages_without_params':
-      command => "/root/scripts/${script_name} ${packages_without_params}",
-      unless  => "/usr/bin/rpm -q ${packages_without_params}",
+    if $facts['os']['family'] == 'RedHat' {
+      # INSTALL REDHAT PACKAGES WITHOUT PARAMS IN ONE TRANSACTION
+      $script_name='puppet-profile_additional_packages-packages_without_params.sh'
+
+      file { "/root/scripts/${script_name}":
+        ensure  => 'file',
+        mode    => '0740',
+        owner   => 'root',
+        group   => 'root',
+        source  => "puppet:///modules/${module_name}/root/scripts/${script_name}",
+        require => File['/root/scripts'],
+      }
+
+      # Find keys without a value and install those packages
+      # via exec/'yum install' (single yum transaction)
+      $packages_without_params = $packages.filter |$key, $val| {
+        empty($val)
+      }.keys.join(' ')
+      exec { 'install_packages_without_params':
+        command => "/root/scripts/${script_name} ${packages_without_params}",
+        unless  => "/usr/bin/rpm -q ${packages_without_params}",
+      }
     }
 
     # Process ALL keys using ensure_packages:
